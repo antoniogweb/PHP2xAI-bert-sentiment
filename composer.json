@@ -1,0 +1,27 @@
+{
+    "name": "antoniogweb/php2xai-sentiment",
+    "description": "Sentiment analysis example built with PHP2xAI. The project demonstrates text preprocessing, embeddings, neural network training, and inference using the PHP frontend and C++ runtime. Sentiment labels are based on the RubixML Sentiment example and are fully acknowledged.",
+    "type": "project",
+    "license": "GPL-3.0-only",
+    "require": {
+        "php": ">=8.1",
+        "antoniogweb/php2xai": "dev-main as 0.1.0"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Antonio Gallo",
+            "email": "antoniog.web@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../PHP2xAI",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
+}
