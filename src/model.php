@@ -23,6 +23,10 @@ class SentimentModel extends Model
 		$this->b1 = Tensor::zeros([$hidden1]);
 		$this->b2 = Tensor::zeros([$hidden2]);
 		$this->b3 = Tensor::zeros([2]);
+
+		// Must be created before graph export, otherwise the encoder weights are
+		// serialized as non-trainable intermediates rather than model parameters.
+		$this->initializeBertEncoder('encoder1', $embDimension, $embDimension * 2);
 		
 		parent::__construct($optimizer);
 	}
@@ -35,12 +39,17 @@ class SentimentModel extends Model
 		$embeddings->setTrainable(false);
 		$embeddings->setRequiresGrad(true);
 
+		$embeddingsPos = $embeddings->positionalEncoding();
+		$embeddingsPos->setTrainable(false);
+		$embeddingsPos->setRequiresGrad(true);
+		
 		$encoded = $this->bertEncoder(
-			$embeddings,
-			8,
-			$embeddings->shape[2] * 4,
+			$embeddingsPos,
+			4,
+			$embeddings->shape[2] * 2,
 			$paddingMask,
-			0.1
+			0.1,
+			'encoder1'
 		);
 		$encoded->setTrainable(false);
 		$encoded->setRequiresGrad(true);
@@ -56,8 +65,8 @@ class SentimentModel extends Model
 	{
 		$embMeanPool = $this->getEmbMeanPool($x);
 		
-		$L1 = $embMeanPool->matmul($this->W1)->add($this->b1)->ReLU()->dropout(20);
-		$L2 = $L1->matmul($this->W2)->add($this->b2)->ReLU()->dropout(20);
+		$L1 = $embMeanPool->matmul($this->W1)->add($this->b1)->ReLU()->dropout(10);
+		$L2 = $L1->matmul($this->W2)->add($this->b2)->ReLU()->dropout(10);
 		$L3 = $L2->matmul($this->W3)->add($this->b3);
 		
 		return $L3;

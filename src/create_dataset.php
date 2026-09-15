@@ -4,7 +4,7 @@ use PHP2xAI\Tokenizer\PHP\Tokenizer;
 
 include("../vendor/autoload.php");
 
-const SEQUENCE_LENGTH = 1024;
+const SEQUENCE_LENGTH = 128;
 const TRAIN_SHUFFLE_SEED = 42;
 const TEST_SHUFFLE_SEED = 43;
 

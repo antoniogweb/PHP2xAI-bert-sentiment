@@ -25,17 +25,17 @@ $outputPath = "./Output";
 if (!@is_dir($outputPath))
 	@mkdir($outputPath, 0777, true);
 
-$dataset = new StreamFileDataset($path."/train.txt", 50);
-$valDataset = new StreamFileDataset($path."/test.txt", 50);
+$dataset = new StreamFileDataset($path."/train.txt", 300);
+$valDataset = new StreamFileDataset($path."/test.txt", 300);
 
 $tvDataset = new TrainValidateDataset($dataset, $valDataset);
 
 $optimizer = new Adam(0.001, 0.9, 0.999);
 $optimizer->setGradClip(1.0); // evita spike di gradiente che fanno risalire la loss
-$model = new SentimentModel($optimizer, 256, 128, 30000, 256, 256);
+$model = new SentimentModel($optimizer, 256, 128, 30000, 256, 128);
 
-$epochsNumber = 20;
+$epochsNumber = 40;
 
 $model->setRuntime("CPP");
 $model->setProvider("EIGEN");
-$model->train($tvDataset, $epochsNumber, realpath(".")."/weights.json",1);
+$model->train($tvDataset, $epochsNumber, realpath(".")."/weights.json",1, realpath(".")."/profiler.log");
