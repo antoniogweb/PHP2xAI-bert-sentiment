@@ -12,7 +12,7 @@ use PHP2xAI\Runtime\PHP\Optimizers\Optimizer;
 
 class SentimentModel extends Model
 {
-	public function __construct(?Optimizer $optimizer = null, int $hidden1 = 128, int $hidden2 = 64, $V = 30000, $L = 256, $embDimension = 512)
+	public function __construct(?Optimizer $optimizer = null, int $hidden1 = 128, int $hidden2 = 64, $V = 30000, $embDimension = 512)
 	{
 		$this->embTable = Tensor::init([$V, $embDimension], 0.05);
 		
